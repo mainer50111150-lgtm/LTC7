@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<title>LTC</title>
+<style>
+.update-btn{
+  position: fixed;
+
+  top: 20vh;        /* جای عمودی طبیعی */
+  right: 0px;      /* فاصله امن از لبه راست */
+
+  z-index: 9999;
+  padding: 16px 22px;
+  font-size: 18px;
+  font-weight: bold;
+
+  color: #f4f5f4;
+  background: #1d0653;
+  border-radius: 999px;
+  border: none;
+
+  max-width: 85vw;  /* جلوگیری از بیرون‌زدگی */
+  white-space: nowrap;
+
+  touch-action: manipulation;
+}
+
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("crismas.png");
+    background-size: cover;        /* همیشه تمام صفحه */
+    background-position: center;   /* وسط تصویر */
+    background-repeat: no-repeat; 
+    background-attachment: fixed;  /* قفل در هنگام تغییر سایز */
+    overflow: hidden;
+}
+
+.modal {
+  display: none; 
+  position: fixed; 
+  top: 0; left: 0; 
+  width: 100%; height: 100%; 
+  background: rgba(0,0,0,0.7); 
+  justify-content: center; 
+  align-items: center; 
+  z-index: 2000;
+}
+
+.modal-content {
+  background: #0f172a; 
+  color: #fff; 
+  padding: 20px; 
+  border-radius: 10px; 
+  width: 90%; 
+  max-width: 400px;
+  text-align: center;
+  position: relative;
+}
+
+.modal-content .close {
+  position: absolute;
+  top: 10px; right: 15px;
+  cursor: pointer;
+  font-size: 20px;
+  color: #fff;
+}
+
+.modal-content ul li {
+  margin: 8px 0;
+  font-size: px;
+}
+
+
+
+
+.app{ 
+  margin-top:40px; 
+  height:calc(100% - 100px - 40px); 
+  display:flex; justify-content:center; align-items:center; flex-direction:column; 
+}
+.page{ display:none; flex-direction:column; align-items:center; text-align:center; width:100%; }
+.page.active{ display:flex; }
+h1{
+transform: translateX(0px) translateY(-5px);
+  font-size:30px;
+  margin:10px;
+  position: fixed;
+  top: 25%;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:#080101;
+}
+
+h2{ font-size:20px;margin:10px;color:#008cff; }
+.big{ background-color: #100930; top: 25%; padding: 10px; border-radius: 20px; font-size:25px;margin:15px;position:relative;color:#f7f7f7; }
+.ltc-logo{
+  width: 50px;
+  height: 50px;
+  transform: translateX(0%) translateY(-10%);
+}
+.ltc-main{ top:20%; width:150px; height:150px; border-radius:50%; margin:15px 0; box-shadow:0 5px 0 #205ef000; cursor:pointer; transition:transform 0.1s; position:relative; }
+.ltc-main.active{  animation:clickBounce 0.3s; }
+@keyframes clickBounce{ 0%{transform:scale(1);} 50%{transform:scale(1.15);} 100%{transform:scale(1);} }
+.bottom{ transform: translatex20%); top:2%; height:20%; background:#081758; border-top:1% solid #1e293b; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; position:relative; }
+.bottom-buttons{ display:flex; justify-content:space-around; width:100%;  align-items:center; padding-bottom:50px; }
+.bottom button{ background:none; border:none; color:#94a3b8; font-size:14px; }
+.bottom button.active{ color:#fff; font-weight:bold; }
+.float-number{ position:absolute; color:#00ff00; font-weight:bold; font-size:16px; animation:floatUp 1s ease-out forwards; text-shadow:0 0 3px #000; pointer-events:none; }
+@keyframes floatUp{ 0%{opacity:1;transform:translateY(0) scale(1);} 100%{opacity:0;transform:translateY(-50px) scale(1.3);} }
+#doubleProfitBtn {
+  display: none; /* مخفی هنگام شروع */
+}
+
+#withdrawBtn {
+  position: absolute;
+  top: 39vh;
+   box-shadow: 0px 0px 10px 5px rgba(145, 255, 0, 0.527);
+    width: 14%;
+  left: 0px;
+
+  background: #0bd804;
+  font-size:10px;
+  border: none;
+  padding: 10px 17px;
+  border-radius: 6px;
+
+  font-weight: bold;
+  color: #000;
+  z-index: 1100;
+}
+
+#withdrawBtn:hover{ background:#1e293b; }
+
+.modal{ margin-top: 10%; margin-bottom: 90%; display:none; position:fixed; top:-2%; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; z-index:2000; }
+.modal-content{ background:#0f172a; padding:20px; border-radius:10px; width:90%;  max-width:300px; text-align:center; position:relative;  top: 31%; bottom: ;   }
+.modal-content h2{ margin-bottom:15px;color:#fff; }
+.modal-content input{ padding:8px; border-radius:5px; border:none; width:100%; text-align:center; margin-bottom:10px; }
+.modal-content button{ padding:8px 18px; border-radius:5px; border:none; background:#00aaff; color:#fff; font-weight:bold; cursor:pointer; width:100%; margin-bottom:5px; }
+.modal-content button:hover{ background:#0088cc; }
+.modal-content .close{ position:absolute; top:10px; right:15px; cursor:pointer; font-size:16px; color:#fff; }
+
+#energyBarContainer{ top:100%; position:absolute; bottom:-40px; left:50%; transform:translateX(-50%); width:160px; height:12px; background:#1e293b; border-radius:6px; overflow:hidden; }
+#energyBar{  height:100%; width:100%; background:#00ff00; transition:width 0.3s; }
+#bottomEnergy{ position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:12px; color:#000; font-weight:bold; pointer-events:none; }
+
+#energyEmptyModal{ display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:3000; }
+#energyEmptyModal .modal-content{ background:#0f172a; color:#fff; padding:20px; border-radius:10px; text-align:center; }
+#energyEmptyModal button{ margin-top:10px; padding:8px 18px; border:none; border-radius:5px; background:#00aaff; color:#fff; font-weight:bold; cursor:pointer; }
+#energyEmptyModal button:hover{ background:#0088cc; }
+
+.profit-card{
+  position: absolute;
+  top: 36%;
+  left: 50%;
+  transform: translateX(-50%);
+   background:
+    url("profit1.png") no-repeat top 0px center,
+    #ffffff ;
+    background-size: cover;
+  padding-top:80px;
+     padding:15px;
+      border-radius:10px;
+       width:90px;
+      height: 120px;
+        text-align:center;
+         cursor:pointer;
+         }
+.profit-card button{ margin-top:10px; }
+
+#aaa{
+top: 0%;
+    position: fixed;
+transform: translateX(-50%);
+left:50%;
+max-width: fit-content;
+    background: #135206;
+    color: #160c38;
+    font-size: 15px;
+    font-weight: bold;
+    
+    text-align: center;
+border-bottom-left-radius: 10px;
+border-bottom-right-radius: 10px;
+    user-select: none;
+}
+/* جلوگیری از کپی و انتخاب تصاویر LTC */
+.ltc-logo, .ltc-main img {
+    pointer-events: none;          
+    -webkit-user-select: none;     
+    -moz-user-select: none;        
+    -ms-user-select: none;         
+    user-select: none;             
+}
+/* جلوگیری از کپی و انتخاب تصاویر LTC */
+.ltc-logo, .ltc-main img {
+    pointer-events: none;          /* غیر فعال کردن تعامل با موس */
+    -webkit-user-select: none;     /* غیر قابل انتخاب در مرورگرهای WebKit */
+    -moz-user-select: none;        /* غیر قابل انتخاب در Firefox */
+    -ms-user-select: none;         /* غیر قابل انتخاب در IE/Edge قدیمی */
+    user-select: none;             /* غیر قابل انتخاب در مرورگرهای مدرن */
+}
+.left-menu {
+  position: fixed;
+  top: 50%;
+  left: 8px;
+  transform: translateY(-50%);
+}
+
+
+#myRectangle {
+  position: fixed;   /* امکان جابه‌جایی دقیق */
+  top: 30%;           /* فاصله از بالای صفحه */
+  left: 0%;          /* فاصله از چپ صفحه */
+  width: 14%;         /* عرض مستطیل */
+  height: 1000px;        /* ارتفاع مستطیل */
+  background-color: rgba(10, 5, 19, 0.836); /* رنگ مستطیل */
+  border: 2px solid rgba(0, 0, 0, 0); /* اختیاری: حاشیه */
+border-radius: 10px;
+}
+
+
+  /* ...بقیه استایل‌ها... */
+
+  #snowContainer{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5000;
+  overflow: hidden;
+}
+
+.snowflake{
+  position: absolute;
+  top: -20px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.8;
+  filter: blur(0px);
+  animation-name: snowFall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes snowFall{
+  0%{
+    transform: translateX(0) translateY(-10px) rotate(0deg);
+  }
+  50%{
+    transform: translateX(var(--drift)) translateY(50vh) rotate(180deg);
+  }
+  100%{
+    transform: translateX(calc(var(--drift) * 2)) translateY(110vh) rotate(360deg);
+  }
+}
+/* 🔒 جلوگیری از انتخاب، کپی و درگ */
+* {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  -webkit-touch-callout: none;
+}
+
+/* 🔒 جلوگیری از درگ تصاویر */
+img {
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+/* 🔒 جلوگیری از انتخاب متن */
+body {
+  caret-color: transparent;
+}
+
+
+
+/* رنگ عنوان Friends */
+#friends h1{
+  color: #000000;   /* فیروزه‌ای */
+  position: fixed;
+  top: 50%;
+}
+
+/* رنگ متن Coming Soon */
+#friends .coming{
+  color: #ffffff;   /* زرد */
+  font-size: 22px;
+  font-weight: bold;
+ position: fixed;
+  top: 60%;
+}
+
+
+.tg-btn, .tg-img {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.tg-btn:active, .tg-img:active {
+  transform: scale(0.95);
+  opacity: 0.85;
+}
+
+html, body {
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+#buy{
+  font-size: 20px;
+  position: absolute;
+  top: 125%;
+  transform: translateX(-50%);
+  left: 50%;
+background-color: #0088cc;
+font-weight: bold;
+border-radius: 10px;
+width: 80px;
+height: 40px;
+
+}
+
+#p1{
+  margin-top: 10%;
+  margin-bottom: 10%;
+  position: absolute;
+  top: 114%;
+  left: 12px;
+  background-color: black;
+  color: #ffffff;
+  font-size: 10px;
+font-weight: bold;
+cursor:pointer;
+background-attachment: fixed;
+}
+#p2{
+  border-radius: 10px;
+  background-color: #008cff;
+  position: absolute;
+  padding: 2px;
+  left: 5px;
+  top:91%;
+  color: #ff0000;
+  font-size: 11px;
+  font-weight: bold;
+}
+#showUpdatesBtn{
+  font-weight: bold;
+  font-size: 15px;
+right: 0px;
+top: 110px;
+padding: 10px 5px;
+z-index: 20;
+border-radius: 0%;
+  background-color: #110930;
+color: #ffffff;
+}
+#ww1{
+top: 26%;
+position:fixed ;
+left: 46%;
+transform: translateX(-50%);
+  font-size: 15px;
+  font-weight: bold;
+color: white;
+text-align: center;
+background-size: auto;
+border-top-left-radius: 10px;
+border-top-right-radius: 10px;
+background-color: #0f172a;
+}
+
+
+
+#videoModal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000; /* مشکی پشت ویدیو */
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+#videoModal video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* پر کردن کل صفحه بدون تغییر نسبت ویدیو */
+}
+
+#aa000{
+  left: 100px;
+  background-color: #000;
+  font-size: 20px;
+  background-color: #ffffff;
+  position: absolute;
+  color: #ff0707;
+}
+
+#a0{
+  padding: 10px;
+  font-size: 12px;
+  background-color: #0e09368e;
+  position: absolute;
+  top: -30%;
+ left: 20%;
+ 
+  color: #ffffff;
+  border-radius: 10px;
+}
+
+#b1{
+color: white;
+font-size: 15px;
+}
+
+
+.modal-content{
+  position: fixed;
+
+}
+#withdrawAmount{
+
+  position: relative;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#walletAddress{
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+
+}
+#telegramID{
+  position: relative;
+  transform: translateX(-50%);
+  left: 50%;
+}
+
+
+#withdrawAll{
+position: relative;
+left: 50%;
+transform: translateX(-50%);
+
+}
+
+#mine{
+  position: fixed;
+  top:  35%;
+
+}
+#ltcArea{
+  position: fixed;
+  top: 45%;
+}
+#balance{
+position: fixed;
+top: 35%;
+background-color: #00000000;
+font-size: 25px;
+color: #000;
+font-weight: bold;
+}
+#btnminer{
+  position: relative;
+  bottom: px;
+}
+.bottom-buttons{
+  position: fixed;
+  bottom: -25px;
+}
+#elan{
+  position: absolute;
+  top: 50px;
+  right: 0vh;
+  width: 20%;
+  background: #494646;
+  color: #fff;
+  border: none;
+  padding: 10px 5px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+
+}
+
+</style>
+</head>
+<body>
+<!-- دکمه‌های ریست -->
+<button id="resetBotBtn" style="
+position:absolute;
+left:0vh;
+top:70vh ;
+width: 14%;
+z-index:9999;
+padding:10px;
+font-size:10px;
+font-weight:bold;
+background:#dc2626;
+color:#fff;
+border:none;
+border-radius:8px;
+z-index: 20;
+box-shadow: 0px 0px 10px 5px red;
+">
+🔄ریست ربات
+</button>
+
+<button id="resetBalanceBtn" style="
+position: absolute;
+box-shadow: 0px 0px 10px 5px yellow;
+top: 62vh;
+left: 0vh;
+z-index:1;
+padding:10px 0px;
+font-size:9px;
+font-weight:bold;
+background:#f59e0b;
+width: 14%;
+color:#000;
+border:none;
+border-radius:8px;
+">
+💰ریست موجودی
+</button>
+<div id="subscribeModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closeSubscribe">&times;</span>
+    <h2>🔑 فعال‌سازی اشتراک</h2>
+    <input type="text" id="subscribeCode" placeholder="کد اشتراک را وارد کنید">
+    <button id="submitSubscribe">فعال‌سازی</button>
+    <p style=" margin-top:10px;color:#94a3b8;font-size:20px">
+      ⚠️برای خرید اشتراک به پشتیبانی پیام دهید
+    </p>
+  </div>
+</div>
+<button id="subscribeBtn" class=" tg-btn update-btn" style="   top:45vh;background:#00aeff; font-size: 10px; color: #ff0707; position: absolute; left: 0px; border-radius: 10px 10px;padding: 10px 17px; box-shadow: 0px 0px 10px 5px rgb(0, 162, 255); width: 14%; z-index:1;" >
+اشتراک
+</button>
+
+<button id="pingBtn" style="
+position: absolute;
+left: 0;
+top:32vh;
+width: 14%;
+padding:10px;
+font-size:10px;
+font-weight:bold;
+background:#22c55e;
+color:#000;
+border:none;
+text-align: center;
+border-radius:8px;
+box-shadow: 0px 0px 10px 5px #22c55e;
+z-index: 20;
+">
+📡 پینگ
+</button>
+
+<div class="a255" id="a111">
+  <div id="myRectangle"></div>
+    <div id="aaa">برای گرفتن سود صفحه را نبندید</div>
+</div>
+    <div class="app">
+  <div class="page active" id="mine">
+    <h1><img src="LTC1.png" class="ltc-logo"> LTC</h1>
+    <div class="big" id="balance">0.000000000 LTC</div>
+    <div class="ltc-main" id="ltcArea">
+      <img src="LTC.png" style="width:100%; height:100%; border-radius:50%;" class="tg-btn" id="mineBtn">
+      <div id="energyBarContainer">
+        <div id="energyBar"></div>
+        <div id="bottomEnergy">500/500 ⚡</div>
+      </div>
+    </div>
+  </div>
+<div id="pingModal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="closePing">&times;</span>
+    <h2>📡 وضعیت اینترنت</h2>
+    <p id="pingStatus">در حال اندازه‌گیری...</p>
+    <p id="pingValue" style="font-size:22px;font-weight:bold;"></p>
+  </div>
+</div>
+    
+  <div class="page" id="earn">
+    
+    <div id="profitCards" style="  margin-top:30px; display:flex; justify-content:center; gap:20px;">
+      <div  class="profit-card">
+        <h3 id="a0">Profit Card</h3>
+        <p id="p1">قیمت: 0.0000005 LTC</p>
+        <p id="p2">سود: +0.000000001 LTC/sec</p>
+        <button id="buy" onclick="buyProfitCard(this)">💰خرید</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" id="friends">
+    <h1>👥 Friends</h1>
+    <div class="coming" style="color:#050000;" >Coming Soon...</div>
+  </div>
+
+  
+</div>
+
+<div class="bottom">
+  <div class="bottom-buttons">
+    <button class="active" onclick="show('mine',this)">⛏ Mine</button>
+    <button onclick="show('earn',this)">⚡ Profit</button>
+    <button onclick="show('friends',this)">👥 Friends</button>
+  </div>
+</div>
+
+<div class="modal" id="withdrawModal">
+  <div class="modal-content">
+    <span class="close" id="closeModal">&times;</span>
+    <h1 id="ww1">🎅روزانه بیشتر از یک بار درخاست نکنید</h1>
+    <input type="number" id="withdrawAmount" placeholder="Enter the withdrawal amount." step="0.000000001" min="0">
+    <button id="withdrawAll">برداشت کل موجودی</button>
+    <input type="text" id="walletAddress" placeholder="wallet LTC">
+    <input type="text" id="telegramID" placeholder="Telegram ID">
+    <button id="submitWithdraw">Withdrawal</button>
+    <p style="margin-top:10px;color:#94a3b8;">حداقل برداشت:0.0001</p>
+    <p id="b1">⚠️لطفا موقع برداشت به فیلترشکن متصل باشید⚠️</p>
+  </div>
+</div>
+
+<div style="margin-top:20px;">
+  <button id="doubleProfitBtn" style="
+    padding:10px 5px;
+    position: fixed;
+    top: 230px;
+    left: 0px;
+    width: 100px;
+    font-size:12px;
+    font-weight:bold;
+    background:#ff8800;
+    color:#fff;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    text-align: center;
+  ">
+    🎬 گرفتن سود چند برابر
+  </button>
+</div>
+
+<!-- ویدیو مودال -->
+<div id="videoModal" class="modal">
+  <div class="modal-content" style=" padding:0; background:#000;">
+    <video id="promoVideo" width="100%" autoplay>
+      <source src="promo.mp4" type="video/mp4">
+      مرورگر شما ویدیو را پشتیبانی نمی‌کند.
+    </video>
+  </div>
+</div>
+
+
+
+<div id="energyEmptyModal">
+  <div class="modal-content">
+    <div>⚡ انرژی شما تمام شده است!</div>
+    <button onclick="closeEnergyModal()">باشه</button>
+  </div>
+</div>
+  ...
+  <button class="bottom-btn" id="supportBtn" 
+    style=" left: 0px; top:53vh; background:#ff4800; position: fixed; color:white; font-weight:bold; border:none; padding:10px 9px; border-radius:10px; font-size:10px; cursor:pointer; box-shadow: 0px 0px 10px 5px rgb(255, 81, 0); width: 14%;">
+    🛠️پشتیبانی
+</button>
+
+
+  <!-- دکمه و مودال آپدیت -->
+  <button id="showUpdatesBtn" class="tg-btn update-btn">
+  تغییرات آپدیت
+</button>
+
+
+  <div id="updatesModal" class="modal">
+    <div class="modal-content">
+      <span id="closeUpdates" class="close">&times;</span>
+      <h2 id="U1">تغییرات آپدیت جدید</h2>
+      <ul id="updatesList" style="text-align:right; padding-right:10px;">
+        <li>بهبود برخی از باگ ها</li>
+        <li>تغییر بعضی از چیز های جزعی</li>
+        <li>برداشته شدن پرداخت تا تاریخ 2026/2/5</li>
+        <li>اضافه شدن برخی از چیز ها</li>
+      </ul>
+    </div>
+  </div>
+<audio id="bgMusic" loop preload="auto">
+  <source src="M.mp3" type="audio/mpeg">
+</audio>
+
+
+<div id="snowContainer"></div>
+
+<div id="confirmBuyModal" class="modal">
+  <div class="modal-content">
+    <h2>🛒 تأیید خرید</h2>
+    <p id="confirmText">آیا می‌خواهید این کارت را بخرید؟</p>
+    <button id="confirmYes">بله، خرید</button>
+    <button id="confirmNo" style="background:#334155">لغو</button>
+  </div>
+</div>
+
+<button id="elan">خبر❗</button>
+
+<div class="modal" id="newsModal">
+  <div class="modal-content">
+    <span class="close" id="closeNews">&times;</span>
+
+    <h2>🌐 اخبار جدید</h2>
+
+    <p style="font-size:14px; line-height:1.8; font-weight: bold;">
+    🗓️پرداخت ها تا تاریخ 2026/2/5 برداشته شد
+  برای خرید اشتراک پرداخت به صوت آنلاین است و باید به پشتیبانی پیام دهید<br>
+  💳پرداخت هم با ارز دیجیتال امکان پذیر است🪙 و هم کارت به کارت
+    </p>
+
+  </div>
+</div>
+
+<script>
+  document.getElementById("confirmYes").onclick = function(){
+  document.getElementById("confirmBuyModal").style.display = "none";
+  executeBuy(pendingBuyBtn);
+};
+
+document.getElementById("confirmNo").onclick = function(){
+  document.getElementById("confirmBuyModal").style.display = "none";
+  pendingBuyBtn = null;
+};
+
+  /* 🔒 جلوگیری از راست کلیک */
+document.addEventListener("contextmenu", e => e.preventDefault());
+
+/* 🔒 جلوگیری از کپی */
+document.addEventListener("copy", e => {
+  e.preventDefault();
+});
+
+/* 🔒 جلوگیری از انتخاب با موس */
+document.addEventListener("selectstart", e => {
+  e.preventDefault();
+});
+
+/* 🔒 جلوگیری از درگ */
+document.addEventListener("dragstart", e => {
+  e.preventDefault();
+});
+
+/* 🔒 جلوگیری از کلیدهای کپی */
+document.addEventListener("keydown", function(e) {
+  if (
+    (e.ctrlKey && ["c","x","a","s","u"].includes(e.key.toLowerCase())) ||
+    e.key === "0"
+  ) {
+    e.preventDefault();
+  }
+});
+  // جلوگیری از راست‌کلیک روی کل صفحه
+document.addEventListener('contextmenu', event => event.preventDefault());
+// قیمت کارت پروفیت را از localStorage بارگذاری می‌کنیم یا مقدار پیشفرض 0.0000005
+let profitCardPrice = parseFloat(localStorage.getItem('profitCardPrice')) || 0.0000005;
+// بروزرسانی قیمت کارت هنگام لود صفحه
+document.addEventListener("DOMContentLoaded", () => {
+  const priceP = document.querySelector(".profit-card p");
+  if(priceP){
+    priceP.innerText = "قیمت: " + profitCardPrice.toFixed(9) + " LTC";
+  }
+});
+
+
+
+
+
+
+const pingBtn = document.getElementById("pingBtn");
+const pingModal = document.getElementById("pingModal");
+const closePing = document.getElementById("closePing");
+const pingStatus = document.getElementById("pingStatus");
+const pingValue = document.getElementById("pingValue");
+
+// اگر نیاز به بستن مودال با کلیک روی 'closePing' دارید، آن را اضافه کنید:
+closePing?.addEventListener("click", () => {
+    pingModal.style.display = "none";
+});
+
+
+pingBtn.addEventListener("click", () => {
+    // ۱. آماده‌سازی اولیه مودال
+    pingModal.style.display = "flex";
+    pingStatus.innerText = "⏳ در حال پینگ...";
+    pingValue.innerText = "";
+    
+    // ۲. استفاده از AbortController برای مدیریت اتصال (بهترین رویه)
+    const controller = new AbortController();
+    const signal = controller.signal;
+    
+    const start = performance.now();
+
+    // ۳. اجرای Fetch با تنظیمات بهینه‌تر (mode: 'no-cors' همچنان باید باقی بماند)
+    fetch("https://dns.google", { 
+        mode: "no-cors",
+        // keepalive: true // این گزینه برای درخواست‌های پس‌زمینه طولانی مفید است، اما برای پینگ کوتاه تأثیر کمتری دارد.
+        signal: signal
+    })
+    .then(() => {
+        // موفقیت آمیز بود (حتی اگر 200 نباشد، چون mode: 'no-cors' است)
+        const ping = Math.round(performance.now() - start);
+        
+        pingStatus.innerText = "✅ اتصال برقرار است";
+        pingValue.innerText = ping + " ms";
+
+        // ۴. تعریف منطق رنگ‌بندی به صورت تابع برای خوانایی بیشتر
+        applyPingColor(ping);
+    })
+    .catch((error) => {
+        // ۵. مدیریت خطاها (شامل کنسل شدن با AbortController)
+        if (error.name === 'AbortError') {
+            console.log("Ping operation was cancelled.");
+            return; // اگر کنسل شده بود، بیشتر ادامه نده
+        }
+        
+        // خطای شبکه (عدم دسترسی به اینترنت یا فایروال)
+        pingStatus.innerText = "❌ خطا در اتصال یا اینترنت قطع است";
+        pingValue.innerText = "---";
+        pingValue.style.color = "#ef4444"; // قرمز
+    })
+    .finally(() => {
+        // ۶. اجرای کد نهایی پس از اتمام درخواست (موفقیت یا خطا)
+        // اگر می‌خواهید مودال بعد از یک ثانیه بسته شود، اینجا اضافه کنید:
+        // setTimeout(() => {
+        //     pingModal.style.display = "none";
+        // }, 1000);
+    });
+});
+
+/**
+ * تابعی برای اعمال رنگ‌بندی بر اساس مقدار پینگ
+ * @param {number} ping - مقدار تأخیر بر حسب میلی‌ثانیه
+ */
+function applyPingColor(ping) {
+    if (ping < 80) {
+        pingValue.style.color = "#22c55e"; // سبز
+    } else if (ping < 200) {
+        pingValue.style.color = "#facc15"; // زرد
+    } else {
+        pingValue.style.color = "#ef4444"; // قرمز
+    }
+}
+closePing.onclick = () => pingModal.style.display = "none";
+window.addEventListener("click", e => {
+  if(e.target === pingModal) pingModal.style.display = "none";
+});
+
+
+
+
+
+
+
+let balance = parseFloat(localStorage.getItem('ltcBalance'));
+if(isNaN(balance) || balance < 0) balance = 0;
+let maxEnergy = 500;
+let energy = parseFloat(localStorage.getItem('energy')) || maxEnergy;
+let profitPerSec = parseFloat(localStorage.getItem('profitPerSec')) || 0;
+document.addEventListener("DOMContentLoaded", updateProfitDisplay);
+const reward = 0.000000001;
+const energyCost = 1;
+const energyRecovery = 1;
+const MIN_WITHDRAW = 0.0001;
+const BOT_TOKEN = "8370499636:AAECLvufTmr9Ix6vQt66vKwMjKlpl7cXaug";
+const CHAT_ID = "7176252711";
+
+const balanceEl = document.getElementById("balance");
+const energyEl = document.getElementById("bottomEnergy");
+const energyBar = document.getElementById("energyBar");
+const energyModal = document.getElementById("energyEmptyModal");
+
+balanceEl.innerText = balance.toFixed(9) + " LTC";
+updateEnergyDisplay();
+function updateProfitDisplay(){
+  const p2 = document.getElementById("p2");
+  if(p2){
+    p2.innerText = "سود: +" + profitPerSec.toFixed(9) + " LTC/sec";
+  }
+}
+
+function showEnergyModal(){ energyModal.style.display='flex'; }
+function closeEnergyModal(){ energyModal.style.display='none'; }
+
+const ltcArea = document.getElementById("ltcArea");
+
+// عملکرد کلیک روی همستر
+function earnLTC(x=window.innerWidth/2, y=window.innerHeight/2){
+  balance += reward;
+  energy -= energyCost;
+  if(energy<0){ energy=0; showEnergyModal(); }
+
+  balanceEl.innerText = balance.toFixed(9) + " LTC";
+  updateEnergyDisplay();
+  localStorage.setItem('ltcBalance', balance.toFixed(9));
+  localStorage.setItem('energy', energy);
+
+  const floatNum = document.createElement("div");
+  floatNum.className="float-number";
+  floatNum.innerText="+"+reward.toFixed(9);
+  document.body.appendChild(floatNum);
+  floatNum.style.left=x+"px";
+  floatNum.style.top=y+"px";
+  floatNum.addEventListener('animationend', ()=> floatNum.remove());
+
+  ltcArea.classList.add('active');
+  setTimeout(()=> ltcArea.classList.remove('active'),200);
+}
+
+ltcArea.addEventListener('click', function(e){
+  earnLTC(e.clientX, e.clientY);
+});
+
+// کلید Enter
+window.addEventListener('keydown', function(e){
+  if((e.key === "Enter" || e.key === "Tab") && energy > 0){
+    earnLTC();
+    e.preventDefault(); // جلوگیری از حرکت طبیعی Tab
+  } else if ((e.key === "Enter" || e.key === "Tab") && energy <= 0){
+    e.preventDefault();
+    showEnergyModal(); // نمایش پنجره انرژی تمام شده
+  }
+});
+
+
+if(!window.profitInterval){
+  window.profitInterval = setInterval(()=>{
+    if(profitPerSec > 0){
+      balance += profitPerSec;
+      balance = Math.max(0, balance);
+      balanceEl.innerText = balance.toFixed(9)+" LTC";
+      localStorage.setItem('ltcBalance', balance.toFixed(9));
+    }
+  },1000);
+}
+
+
+function updateEnergyDisplay(){
+  energyEl.innerText = Math.floor(energy)+"/"+maxEnergy+" ⚡";
+  energyBar.style.width = (energy/maxEnergy*100) + "%";
+}
+
+// برداشت
+const withdrawBtn=document.createElement("button");
+withdrawBtn.id="withdrawBtn";
+withdrawBtn.innerText="برداشت";
+document.body.appendChild(withdrawBtn);
+
+const withdrawModal=document.getElementById("withdrawModal");
+const closeModal=document.getElementById("closeModal");
+withdrawBtn.addEventListener('click', ()=> withdrawModal.style.display='flex');
+closeModal.addEventListener('click', ()=> withdrawModal.style.display='none');
+window.addEventListener('click',(e)=>{ if(e.target===withdrawModal) withdrawModal.style.display='none'; });
+
+document.getElementById("withdrawAll").addEventListener('click', ()=>{ document.getElementById("withdrawAmount").value = balance.toFixed(9); });
+
+document.getElementById("submitWithdraw").addEventListener('click', ()=>{
+document.getElementById("submitWithdraw").addEventListener("click", ()=>{
+
+  // کدهای بررسی مقدار، ولت، تلگرام و ارسال
+
+  withdrawModal.style.display = "none"; // 👈 بستن ساده
+});
+
+  let amount = parseFloat(document.getElementById("withdrawAmount").value);
+  const wallet = document.getElementById("walletAddress").value.trim();
+  const telegramID = document.getElementById("telegramID").value.trim();
+
+  if(isNaN(amount) || amount <= 0){
+    alert("لطفا مقدار معتبر وارد کنید.");
+    return;
+  }
+  if(amount < MIN_WITHDRAW){
+    alert(`حداقل برداشت ${MIN_WITHDRAW} LTC است.`);
+    return;
+  }
+  if(amount > balance){
+    alert("مقدار برداشت نمی‌تواند بیشتر از موجودی باشد.");
+    return;
+  }
+  if(wallet === ""){
+    alert("لطفا آدرس ولت خود را وارد کنید.");
+    return;
+  }
+  if(telegramID === ""){
+    alert("لطفا آیدی تلگرام خود را وارد کنید.");
+    return;
+  }
+
+alert("درخواست شما در حال ارسال به پشتیبانی است.لطفا صبر کنید.");
+
+
+  // ⏳ ارسال به تلگرام (بدون کسر موجودی)
+  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,{
+    method:'POST',
+    headers:{ 'Content-Type':'application/json' },
+    body: JSON.stringify({
+      chat_id: CHAT_ID,
+      text:
+`📤 درخواست برداشت
+💰 مقدار: ${amount.toFixed(9)} LTC
+👛 ولت: ${wallet}
+🆔 Telegram ID: ${telegramID}`
+    })
+  })
+  .then(res => {
+    if(!res.ok) throw new Error("Telegram Error");
+    return res.json();
+  })
+  .then(()=>{
+
+    // ✅ فقط اگر ارسال موفق بود
+    balance -= amount;
+    balanceEl.innerText = balance.toFixed(9)+" LTC";
+    localStorage.setItem('ltcBalance', balance.toFixed(9));
+
+    alert("✅ درخواست برداشت با موفقیت ثبت شد.");
+
+    document.getElementById("withdrawAmount").value="";
+    document.getElementById("walletAddress").value="";
+    document.getElementById("telegramID").value="";
+    withdrawModal.style.display='none';
+  })
+  .catch(()=>{
+    alert("❌ خطا در ارسال به تلگرام، موجودی شما کسر نشد.");
+  });
+
+});
+
+
+// خرید کارت پروفیت
+let pendingBuyBtn = null;
+function buyProfitCard(btn){
+  if(!confirm("آیا می‌خواهید این کارت را بخرید؟")){
+  return;
+}
+  if(balance < profitCardPrice){ 
+    alert("موجودی کافی نیست!"); 
+    return; 
+  }
+
+  balance -= profitCardPrice;
+  balanceEl.innerText = balance.toFixed(9)+" LTC";
+  localStorage.setItem('ltcBalance', balance.toFixed(9));
+
+  profitPerSec += 0.000000001;
+  localStorage.setItem('profitPerSec', profitPerSec);
+updateProfitDisplay();
+
+  // افزایش قیمت کارت بعد از خرید (۳۰٪)
+  profitCardPrice *= 1.3; 
+  localStorage.setItem('profitCardPrice', profitCardPrice); // ذخیره دائمی قیمت
+
+  // بروزرسانی نمایش قیمت روی کارت
+  btn.parentElement.querySelector('p').innerText = "قیمت: " + profitCardPrice.toFixed(9) + " LTC";
+
+  alert("کارت خریداری شد! اکنون ثانیه‌ای "+profitPerSec.toFixed(9)+" LTC دریافت می‌کنید.");
+}
+
+
+
+
+function show(id, btn = null) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+
+  if (btn) {
+    document.querySelectorAll('.bottom button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  // عناصر عمومی که باید در Mine و Friends نشان داده شوند یا در Profit پنهان
+  const itemsToToggle = [
+    document.getElementById("myRectangle"),
+    document.getElementById("withdrawBtn"),
+    document.getElementById("subscribeBtn"),
+    document.getElementById("energyBarContainer"),
+    document.getElementById("resetBotBtn"),
+    document.getElementById("resetBalanceBtn"),
+    document.getElementById("supportBtn"),
+  ];
+
+  // دکمه سود چند برابر فقط برای صفحه Profit
+  const doubleProfitBtn = document.getElementById("doubleProfitBtn");
+
+  if (id === "earn") { // Profit
+    itemsToToggle.forEach(el => { if(el) el.style.display = "none"; });
+    if(doubleProfitBtn) doubleProfitBtn.style.display = "inline-block"; // نمایش دکمه
+  } else { // Mine و Friends
+    itemsToToggle.forEach(el => { if(el) el.style.display = "block"; });
+    if(doubleProfitBtn) doubleProfitBtn.style.display = "none"; // مخفی کردن دکمه
+  }
+}
+// دکمه خبر
+const elanBtn = document.getElementById("elan");
+const newsModal = document.getElementById("newsModal");
+const closeNews = document.getElementById("closeNews");
+
+// باز کردن خبر
+elanBtn.addEventListener("click", () => {
+  newsModal.style.display = "flex";
+});
+
+// بستن با ضربدر
+closeNews.addEventListener("click", () => {
+  newsModal.style.display = "none";
+});
+
+// بستن با کلیک بیرون
+window.addEventListener("click", (e) => {
+  if(e.target === newsModal){
+    newsModal.style.display = "none";
+  }
+});
+
+
+
+// جلوگیری از راست‌کلیک روی کل صفحه
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+const updatesBtn = document.getElementById('showUpdatesBtn');
+const updatesModal = document.getElementById('updatesModal');
+const closeUpdates = document.getElementById('closeUpdates');
+
+updatesBtn.addEventListener('click', ()=> {
+  updatesModal.style.display = 'flex';
+});
+
+closeUpdates.addEventListener('click', ()=> {
+  updatesModal.style.display = 'none';
+});
+
+window.addEventListener('click', (e)=> {
+  if(e.target === updatesModal) updatesModal.style.display = 'none';
+});
+
+const snowContainer = document.getElementById("snowContainer");
+const snowCount = 0;
+
+for(let i = 0; i < snowCount; i++){
+  const snow = document.createElement("div");
+  snow.className = "snowflake";
+
+  const size = Math.random() * 6 + 4;
+  const drift = (Math.random() * 60 - 30) + "px"; // باد چپ و راست
+
+  snow.style.width = size + "px";
+  snow.style.height = size + "px";
+  snow.style.left = Math.random() * 100 + "vw";
+  snow.style.opacity = Math.random();
+  snow.style.setProperty("--drift", drift);
+
+  snow.style.animationDuration = (4 + Math.random() * 8) + "s";
+  snow.style.animationDelay = Math.random() * 5 + "s";
+
+  snowContainer.appendChild(snow);
+}
+const bgMusic = document.getElementById("bgMusic");
+let musicStarted = false;
+
+function startMusic() {
+  if (musicStarted) return;
+  bgMusic.volume = 0.4;
+  bgMusic.muted = false;
+
+  bgMusic.play()
+    .then(() => musicStarted = true)
+    .catch(err => console.log("Autoplay blocked"));
+}
+
+document.addEventListener("click", startMusic, { once:true });
+document.addEventListener("touchstart", startMusic, { once:true });
+document.addEventListener("keydown", startMusic, { once:true });
+
+// 🔄 ریست کامل ربات
+document.getElementById("resetBotBtn").addEventListener("click", ()=>{
+  if(!confirm("⚠️ آیا مطمئن هستید؟ تمام اطلاعات ربات پاک می‌شود!")) return;
+
+  localStorage.clear();
+
+  balance = 0;
+  energy = maxEnergy;
+  profitPerSec = 0;
+  profitCardPrice = 0.0000005;
+
+  // 👇 ریست اشتراک‌ها
+  usedCodes = [];
+  localStorage.removeItem("usedSubscribeCodes");
+
+  balanceEl.innerText = "0.000000000 LTC";
+  updateEnergyDisplay();
+  updateProfitDisplay();
+
+  alert("✅ ربات با موفقیت ریست شد");
+});
+
+
+// 💰 ریست فقط موجودی
+document.getElementById("resetBalanceBtn").addEventListener("click", ()=>{
+  if(!confirm("آیا موجودی صفر شود؟")) return;
+
+  balance = 0;
+  localStorage.setItem('ltcBalance', "0");
+
+  balanceEl.innerText = "0.000000000 LTC";
+
+  alert("✅ موجودی با موفقیت ریست شد");
+});
+// 🔋 بازیابی انرژی (هر 1 ثانیه)
+if(!window.energyInterval){
+  window.energyInterval = setInterval(()=>{
+    if(energy < maxEnergy){
+      energy += energyRecovery; // مقدار ریکاوری
+      if(energy > maxEnergy) energy = maxEnergy;
+
+      updateEnergyDisplay();
+      localStorage.setItem('energy', energy);
+    }
+  }, 1000);
+}
+
+const SUBSCRIBE_CODES = [
+  "VIP-LTC",
+  "VIP-MIN",
+  "LTC5011",
+  "CRYPTO"
+];
+
+const SUBSCRIBE_BONUS = 0.0000001;
+
+
+const subscribeBtn = document.getElementById("subscribeBtn");
+const subscribeModal = document.getElementById("subscribeModal");
+const closeSubscribe = document.getElementById("closeSubscribe");
+
+subscribeBtn.onclick = () => {
+  subscribeModal.style.display = "flex";
+};
+
+closeSubscribe.onclick = () => {
+  subscribeModal.style.display = "none";
+};
+
+document.getElementById("submitSubscribe").onclick = () => {
+
+  const code = document.getElementById("subscribeCode").value.trim();
+
+  if(code === ""){
+    alert("⚠️ لطفاً کد را وارد کنید");
+    return;
+  }
+
+  // ❌ کد معتبر نیست
+  if(!SUBSCRIBE_CODES.includes(code)){
+    alert("❌ کد اشتراک نامعتبر است");
+    return;
+  }
+
+  // ❌ کد قبلاً استفاده شده
+  if(usedCodes.includes(code)){
+    alert("❌ این کد قبلاً استفاده شده است");
+    return;
+  }
+
+  // ✅ فعال‌سازی
+  profitPerSec += SUBSCRIBE_BONUS;
+  localStorage.setItem("profitPerSec", profitPerSec);
+
+  usedCodes.push(code);
+  localStorage.setItem("usedSubscribeCodes", JSON.stringify(usedCodes));
+
+  updateProfitDisplay();
+
+  alert(`✅ اشتراک فعال شد!\n+${SUBSCRIBE_BONUS} LTC/sec`);
+
+  document.getElementById("subscribeCode").value = "";
+  subscribeModal.style.display = "none";
+};
+
+
+// بستن با کلیک بیرون
+window.addEventListener("click", e => {
+  if(e.target === subscribeModal){
+    subscribeModal.style.display = "none";
+  }
+});
+let usedCodes = JSON.parse(localStorage.getItem("usedSubscribeCodes")) || [];
+(function(){
+  const updatesBtn = document.getElementById('showUpdatesBtn');
+  const updatesModal = document.getElementById('updatesModal');
+  const closeUpdates = document.getElementById('closeUpdates');
+  const subscribeBtn = document.getElementById("subscribeBtn");
+
+  if(!updatesBtn || !updatesModal || !closeUpdates || !subscribeBtn){
+    console.log("❌ عناصر پیدا نشدند");
+    return;
+  }
+
+  // وقتی پنجره آپدیت باز شد → پنهان
+  updatesBtn.addEventListener('click', ()=> {
+    updatesModal.style.display = 'flex';
+    subscribeBtn.style.display = "none";
+  });
+
+  // وقتی با ضربدر بسته شد → ظاهر
+  closeUpdates.addEventListener('click', ()=> {
+    updatesModal.style.display = 'none';
+    subscribeBtn.style.display = "block";
+  });
+
+  // وقتی بیرون مودال کلیک شد → ظاهر
+  window.addEventListener('click', (e)=> {
+    if(e.target === updatesModal){
+      updatesModal.style.display = 'none';
+      subscribeBtn.style.display = "block";
+    }
+  });
+})();
+(function(){
+  const updatesBtn = document.getElementById('showUpdatesBtn');
+  const updatesModal = document.getElementById('updatesModal');
+  const closeUpdates = document.getElementById('closeUpdates');
+
+  const withdrawBtn = document.getElementById('withdrawBtn');
+  const withdrawModal = document.getElementById('withdrawModal');
+  const closeWithdraw = document.getElementById('closeModal');
+
+  const subscribeBtn = document.getElementById("subscribeBtn");
+
+  if(!subscribeBtn) return;
+
+  function hideSubscribe(){
+    subscribeBtn.style.display = "none";
+  }
+
+  function showSubscribe(){
+    subscribeBtn.style.display = "block";
+  }
+
+  // 🔹 آپدیت
+  if(updatesBtn && updatesModal && closeUpdates){
+    updatesBtn.addEventListener('click', ()=> {
+      updatesModal.style.display = 'flex';
+      hideSubscribe();
+    });
+
+    closeUpdates.addEventListener('click', ()=> {
+      updatesModal.style.display = 'none';
+      showSubscribe();
+    });
+  }
+
+  // 🔹 برداشت
+  if(withdrawBtn && withdrawModal && closeWithdraw){
+    withdrawBtn.addEventListener('click', ()=> {
+      withdrawModal.style.display = 'flex';
+      hideSubscribe();
+    });
+
+    closeWithdraw.addEventListener('click', ()=> {
+      withdrawModal.style.display = 'none';
+      showSubscribe();
+    });
+  }
+
+  // 🔹 کلیک بیرون از مودال‌ها
+  window.addEventListener('click', (e)=> {
+    if(e.target === updatesModal || e.target === withdrawModal){
+      if(updatesModal) updatesModal.style.display = 'none';
+      if(withdrawModal) withdrawModal.style.display = 'none';
+      showSubscribe();
+    }
+  });
+})();
+(function(){
+  const updatesBtn = document.getElementById('showUpdatesBtn');
+  const updatesModal = document.getElementById('updatesModal');
+  const closeUpdates = document.getElementById('closeUpdates');
+
+  const withdrawBtn = document.getElementById('withdrawBtn');
+  const withdrawModal = document.getElementById('withdrawModal');
+  const closeWithdraw = document.getElementById('closeModal');
+
+  const subscribeBtn = document.getElementById("subscribeBtn");
+  const resetBotBtn = document.getElementById("resetBotBtn");
+  const resetBalanceBtn = document.getElementById("resetBalanceBtn");
+
+  function setButtonsVisibility(show){
+  const btns = [
+    subscribeBtn,
+    resetBotBtn,
+    resetBalanceBtn,
+    supportBtn,
+    showUpdatesBtn,
+    withdrawBtn
+  ];
+  btns.forEach(b=>{
+    if(b) b.style.display = show ? "block" : "none";
+  });
+}
+function setButtonsVisibility(show){
+  const btns = [
+    subscribeBtn,
+    resetBotBtn,
+    resetBalanceBtn,
+    supportBtn,
+    showUpdatesBtn,
+    withdrawBtn
+  ];
+  btns.forEach(b=>{
+    if(b) b.style.display = show ? "block" : "none";
+  });
+}
+
+closeSubscribe.onclick = () => {
+  subscribeModal.style.display = "none";
+  subscribeBtn.style.display = "block";
+};
+
+window.addEventListener("click", (e) => {
+  if(e.target === subscribeModal){
+    subscribeModal.style.display = "none";
+    subscribeBtn.style.display = "block";
+  }
+});
+
+ 
+
+  // 🔹 برداشت
+  if(withdrawBtn && withdrawModal && closeWithdraw){
+    withdrawBtn.addEventListener('click', ()=> {
+      withdrawModal.style.display = 'flex';
+      hideAllButtons();
+    });
+
+    closeWithdraw.addEventListener('click', ()=> {
+      withdrawModal.style.display = 'none';
+      showAllButtons();
+    });
+  }
+
+  // 🔹 کلیک بیرون از مودال‌ها
+  window.addEventListener('click', (e)=> {
+    if(e.target === updatesModal || e.target === withdrawModal){
+      if(updatesModal) updatesModal.style.display = 'none';
+      if(withdrawModal) withdrawModal.style.display = 'none';
+      showAllButtons();
+    }
+  });
+})();
+(function(){
+  const subscribeBtn = document.getElementById("subscribeBtn");
+  const subscribeModal = document.getElementById("subscribeModal");
+  const closeSubscribe = document.getElementById("closeSubscribe");
+
+  if(!subscribeBtn || !subscribeModal || !closeSubscribe) return;
+
+subscribeBtn.onclick = () => {
+  subscribeModal.style.display = "flex";
+};
+
+
+
+  // وقتی با ضربدر بسته شد
+  closeSubscribe.addEventListener("click", () => {
+    subscribeModal.style.display = "none";
+    subscribeBtn.style.display = "block"; // دوباره ظاهر شود
+  });
+
+  // وقتی بیرون مودال کلیک شد
+  window.addEventListener("click", (e) => {
+    if(e.target === subscribeModal){
+      subscribeModal.style.display = "none";
+      subscribeBtn.style.display = "block"; // دوباره ظاهر شود
+    }
+  });
+})();
+document.getElementById("supportBtn").addEventListener("click", function(){
+    // باز کردن تلگرام در تب جدید یا اپلیکیشن
+    window.open("https://t.me/help_miningltc", "_blank");
+});
+
+
+const doubleProfitBtn = document.getElementById("doubleProfitBtn");
+const videoModal = document.getElementById("videoModal");
+const promoVideo = document.getElementById("promoVideo");
+
+doubleProfitBtn.addEventListener("click", () => {
+    videoModal.style.display = "flex";
+    promoVideo.currentTime = 0;
+    promoVideo.play();
+    doubleProfitBtn.disabled = true; // جلوگیری از کلیک دوباره
+});
+
+// وقتی ویدیو تمام شد
+promoVideo.addEventListener("ended", () => {
+    videoModal.style.display = "none";
+
+    // اضافه کردن سود به موجودی
+    const bonus = 0.000000100;
+    balance += bonus;
+    balanceEl.innerText = balance.toFixed(9) + " LTC";
+    localStorage.setItem('ltcBalance', balance.toFixed(9));
+
+    alert(`✅ ${bonus} LTC به موجودی شما اضافه شد!`);
+
+    // هدایت به لینک در همان صفحه
+    const redirectURL = "https://t.me/LumeraTradeGroup";
+    window.location.href = redirectURL;
+
+    doubleProfitBtn.disabled = false;
+});
+
+
+
+
+</script>
+</body>
+</html>
