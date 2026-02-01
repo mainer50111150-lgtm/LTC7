@@ -510,7 +510,7 @@ font-weight: bold;
 <button id="resetBotBtn" style="
 position:absolute;
 left:0vh;
-top:70vh ;
+top:73vh ;
 width: 14%;
 z-index:9999;
 padding:10px;
@@ -529,7 +529,7 @@ box-shadow: 0px 0px 10px 5px red;
 <button id="resetBalanceBtn" style="
 position: absolute;
 box-shadow: 0px 0px 10px 5px yellow;
-top: 62vh;
+top: 63vh;
 left: 0vh;
 z-index:1;
 padding:10px 0px;
@@ -554,14 +554,14 @@ border-radius:8px;
     </p>
   </div>
 </div>
-<button id="subscribeBtn" class=" tg-btn update-btn" style="   top:45vh;background:#00aeff; font-size: 10px; color: #ff0707; position: absolute; left: 0px; border-radius: 10px 10px;padding: 10px 17px; box-shadow: 0px 0px 10px 5px rgb(0, 162, 255); width: 14%; z-index:1;" >
+<button id="subscribeBtn" class=" tg-btn update-btn" style="   top:46vh; background:#00aeff; font-size: 10px; color: #ff0707; position: absolute; left: 0px; border-radius: 10px 10px;padding: 10px 17px; box-shadow: 0px 0px 10px 5px rgb(0, 162, 255); width: 14%; z-index:1;" >
 اشتراک
 </button>
 
 <button id="pingBtn" style="
 position: absolute;
 left: 0;
-top:32vh;
+top:31vh;
 width: 14%;
 padding:10px;
 font-size:10px;
@@ -571,9 +571,12 @@ color:#000;
 border:none;
 text-align: center;
 border-radius:8px;
+padding-bottom: 1%;
+padding-top: 1%;
 box-shadow: 0px 0px 10px 5px #22c55e;
 z-index: 20;
 ">
+
 📡 پینگ
 </button>
 
@@ -1104,6 +1107,7 @@ function show(id, btn = null) {
     document.getElementById("subscribeBtn"),
     document.getElementById("energyBarContainer"),
     document.getElementById("resetBotBtn"),
+    document.getElementById("pingBtn"),
     document.getElementById("resetBalanceBtn"),
     document.getElementById("supportBtn"),
   ];
@@ -1250,8 +1254,11 @@ if(!window.energyInterval){
 const SUBSCRIBE_CODES = [
   "VIP-LTC",
   "VIP-MIN",
-  "LTC5011",
-  "CRYPTO"
+  "LTC5911",
+  "CRYPTO",
+  "LTC5941",
+  "LTC1234",
+"LTC0"
 ];
 
 const SUBSCRIBE_BONUS = 0.0000001;
@@ -1408,7 +1415,7 @@ let usedCodes = JSON.parse(localStorage.getItem("usedSubscribeCodes")) || [];
   const withdrawBtn = document.getElementById('withdrawBtn');
   const withdrawModal = document.getElementById('withdrawModal');
   const closeWithdraw = document.getElementById('closeModal');
-
+const pingBtn = document.getElementById("pingBtn");
   const subscribeBtn = document.getElementById("subscribeBtn");
   const resetBotBtn = document.getElementById("resetBotBtn");
   const resetBalanceBtn = document.getElementById("resetBalanceBtn");
@@ -1419,6 +1426,7 @@ let usedCodes = JSON.parse(localStorage.getItem("usedSubscribeCodes")) || [];
     resetBotBtn,
     resetBalanceBtn,
     supportBtn,
+    pingBtn,
     showUpdatesBtn,
     withdrawBtn
   ];
@@ -1431,6 +1439,7 @@ function setButtonsVisibility(show){
     subscribeBtn,
     resetBotBtn,
     resetBalanceBtn,
+    pingBtn,
     supportBtn,
     showUpdatesBtn,
     withdrawBtn
